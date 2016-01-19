@@ -75,10 +75,13 @@ public final class EventHandler {
 						if (listener.getClass().getName().equals(caller.getName())) {
 			                LOGGER.info("[Event skip : <{}> by self <{}>]", new Object[]{event, caller.getName()});
 			            } else {
-			                LOGGER.info("[Event catch : <{}> by <{}>]", 
-			                        new Object[]{event, listener.getClass().getName()});
+			                LOGGER.info("[Event catch : <{}> by <{}>]", new Object[]{event, listener.getClass().getName()});
 			                
-			                listener.onEvent(event);
+			                try {
+			                	listener.onEvent(event);
+			                } catch (Exception e) {
+			                	LOGGER.error("[Event error : <{}> on <{}>]", new Object[]{event, listener.getClass().getName(), e});
+			                }
 			            }
 					}
 				}
@@ -97,7 +100,11 @@ public final class EventHandler {
             } else {
                 LOGGER.info("[Event catch : <{}> by <{}>]", new Object[]{event, listener.getClass().getName()});
                 
-                listener.onEvent(event);
+                try {
+                	listener.onEvent(event);
+                } catch (Exception e) {
+                	LOGGER.error("[Event error : <{}> on <{}>]", new Object[]{event, listener.getClass().getName(), e});
+                }
             }
         }
 	}
