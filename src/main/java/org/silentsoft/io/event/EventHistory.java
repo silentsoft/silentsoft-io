@@ -60,7 +60,6 @@ public class EventHistory {
 
 	@Override
 	public String toString() {
-		return String.format("%s{Date=%s, EventType=%s, Caller=%s, Event=%s, Listener=%s, Asynch=%s}",
-				super.toString(), getDate(), getEventType(), getCaller(), getEvent(), getListener(), isAsynch());
+		return String.format("{Date=%s, EventType=%s, Event=%s, Asynch=%s, Caller=%s, Listener=%s}", getDate(), getEventType(), getEvent(), isAsynch(), getCaller(), getListener());
 	}
 }
