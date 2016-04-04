@@ -24,14 +24,14 @@ public class EventHistory {
 	private boolean isAsynch;
 	
 	private Date date;
-
-	public EventHistory(EventType eventType, Class<?> caller, String event, EventListener listener, boolean isAsynch) {
-		this.eventType = eventType;
-		this.caller = caller;
-		this.event = event;
-		this.listener = listener;
-		this.isAsynch = isAsynch;
+	
+	public EventHistory(EventType eventType, String event, boolean isAsynch, Class<?> caller, EventListener listener) {
 		this.date = new Date();
+		this.eventType = eventType;
+		this.event = event;
+		this.isAsynch = isAsynch;
+		this.caller = caller;
+		this.listener = listener;
 	}
 	
 	public EventType getEventType() {

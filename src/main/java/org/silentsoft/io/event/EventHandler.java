@@ -97,7 +97,7 @@ public final class EventHandler {
 	 * @param doAsynch
 	 */
 	public static synchronized void callEvent(final Class<?> caller, String event, boolean doAsynch) {
-		addHistory(new EventHistory(EventType.OCCUR, caller, event, null, doAsynch));
+		addHistory(new EventHistory(EventType.OCCUR, event, doAsynch, caller, null));
 		LOGGER.info("[Event occur : <{}> by <{}>]", new Object[]{event, caller.getName()});
 		
 		if (doAsynch) {
@@ -128,18 +128,18 @@ public final class EventHandler {
 			@Override
 			public void run() {
 				if (listener.getClass().getName().equals(caller.getName())) {
-					addHistory(new EventHistory(EventType.SKIP, caller, event, listener, isAsynch));
+					addHistory(new EventHistory(EventType.SKIP, event, isAsynch, caller, listener));
 	                LOGGER.info("[Event skip : <{}> by self <{}>]", new Object[]{event, caller.getName()});
 	            } else {
-	            	addHistory(new EventHistory(EventType.CATCH, caller, event, listener, isAsynch));
+	            	addHistory(new EventHistory(EventType.CATCH, event, isAsynch, caller, listener));
 	                LOGGER.info("[Event catch : <{}> by <{}>]", new Object[]{event, listener.getClass().getName()});
 	                
 	                try {
-	                	addHistory(new EventHistory(EventType.SCHEDULED, caller, event, listener, isAsynch));
+	                	addHistory(new EventHistory(EventType.SCHEDULED, event, isAsynch, caller, listener));
 	                	listener.onEvent(event);
-	                	addHistory(new EventHistory(EventType.PROCESSED, caller, event, listener, isAsynch));
+	                	addHistory(new EventHistory(EventType.PROCESSED, event, isAsynch, caller, listener));
 	                } catch (Exception e) {
-	                	addHistory(new EventHistory(EventType.FAILURE, caller, event, listener, isAsynch));
+	                	addHistory(new EventHistory(EventType.FAILURE, event, isAsynch, caller, listener));
 	                	LOGGER.error("[Event failure : <{}> on <{}>]", new Object[]{event, listener.getClass().getName(), e});
 	                }
 	            }
