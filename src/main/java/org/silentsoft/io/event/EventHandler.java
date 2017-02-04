@@ -98,7 +98,9 @@ public final class EventHandler {
 	 */
 	public static synchronized void callEvent(final Class<?> caller, String event, boolean doAsynch) {
 		addHistory(new EventHistory(EventType.OCCUR, event, doAsynch, caller, null));
-		LOGGER.info("[Event occur : <{}> by <{}>]", new Object[]{event, caller.getName()});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("[Event occur : <{}> by <{}>]", new Object[]{event, caller.getName()});
+		}
 		
 		if (doAsynch) {
 			callEventByAsynch(caller, event);
@@ -129,10 +131,14 @@ public final class EventHandler {
 			public void run() {
 				if (listener.getClass().getName().equals(caller.getName())) {
 					addHistory(new EventHistory(EventType.SKIP, event, isAsynch, caller, listener));
-	                LOGGER.info("[Event skip : <{}> by self <{}>]", new Object[]{event, caller.getName()});
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("[Event skip : <{}> by self <{}>]", new Object[]{event, caller.getName()});
+					}
 	            } else {
 	            	addHistory(new EventHistory(EventType.CATCH, event, isAsynch, caller, listener));
-	                LOGGER.info("[Event catch : <{}> by <{}>]", new Object[]{event, listener.getClass().getName()});
+	            	if (LOGGER.isDebugEnabled()) {
+	            		LOGGER.debug("[Event catch : <{}> by <{}>]", new Object[]{event, listener.getClass().getName()});
+	            	}
 	                
 	                try {
 	                	addHistory(new EventHistory(EventType.SCHEDULED, event, isAsynch, caller, listener));
